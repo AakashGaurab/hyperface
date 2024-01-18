@@ -6,8 +6,8 @@ const cors = require("cors");
 const {connect} = require("./config/db");  // Database importing for connection
 const rateLimit = require('express-rate-limit'); // importing rate limiter
 
-const {user} = require("./routes/user");
-const {auth} = require("./middleware/authentication");
+const {user} = require("./routes/userRoute");
+const {auth} = require("./middleware/auth");
 const {course} = require("./routes/courseRoute");
 const {audio} = require("./routes/audioRoute");
 
