@@ -1,9 +1,9 @@
 const express = require('express');
 const course = express.Router();
-const Course = require('../models/Course');
+const {Course} = require('../models/courseModel');
 
 // Create a new course
-course.post('/courses', async (req, res) => {
+course.post('/post', async (req, res) => {
   try {
     const course = new Course(req.body);
     await course.save();
@@ -14,7 +14,7 @@ course.post('/courses', async (req, res) => {
 });
 
 // Get all courses
-course.get('/courses', async (req, res) => {
+course.get('/get-all', async (req, res) => {
   try {
     const courses = await Course.find();
     res.json(courses);
@@ -24,9 +24,13 @@ course.get('/courses', async (req, res) => {
 });
 
 // Get a specific course by ID
-course.get('/courses/:id', async (req, res) => {
+course.get('/:id', async (req, res) => {
   try {
-    const course = await Course.findById(req.params.id);
+    const course = await Course.findById(req.params.id).populate({
+        path: 'contents',
+        model: 'Audiobook',
+        select: 'title author length summary coverImage audioFileURL',
+      });
     if (!course) {
       return res.status(404).json({ error: 'Course not found' });
     }
@@ -37,7 +41,7 @@ course.get('/courses/:id', async (req, res) => {
 });
 
 // Update a course by ID
-course.patch('/courses/:id', async (req, res) => {
+course.patch('/:id', async (req, res) => {
   try {
     const course = await Course.findByIdAndUpdate(req.params.id, req.body, { new: true });
     if (!course) {
@@ -50,7 +54,7 @@ course.patch('/courses/:id', async (req, res) => {
 });
 
 // Delete a course by ID
-course.delete('/courses/:id', async (req, res) => {
+course.delete('/:id', async (req, res) => {
   try {
     const course = await Course.findByIdAndDelete(req.params.id);
     if (!course) {
@@ -62,4 +66,4 @@ course.delete('/courses/:id', async (req, res) => {
   }
 });
 
-module.exports = router;
+module.exports = {course};
