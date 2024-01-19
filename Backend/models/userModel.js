@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema({
   password: String,
   courses: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Course', // Assuming you have a Course model for relevant courses
+    ref: 'Course', //Course model for relevant courses
   }],
 });
 
